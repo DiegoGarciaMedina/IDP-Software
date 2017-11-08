@@ -10,7 +10,6 @@ robot_link rlink;
 int main()
 {
   stopwatch watch;
-  int time_elapsed,time_elapsed2;
   int a=0,i,val;
 
   if (!rlink.initialise (ROBOT_NUM)) { // setup the link
@@ -36,20 +35,36 @@ int main()
       a=a+2*i;
     }
   
-  time_elapsed = watch.read();
 		
-  cout << "The time elapsed is " << time_elapsed << endl;
+  cout << "The time elapsed is " << watch.read() << endl;
 
-  time_elapsed2 = watch.read();
 
-  rlink.command(MOTOR_1_GO,100);
+  rlink.command(MOTOR_3_GO,254);
   //rlink.command(MOTOR_2_GO,100);
-  //rlink.command(MOTOR_3_GO,100);
+  rlink.command(MOTOR_1_GO,127);
   //rlink.command(MOTOR_4_GO,100);
   
-  while (time_elapsed2 < 10000)  {
-    time_elapsed2 = watch.read();
+  while (watch.read() < 10000)  {
   }
-
+  
+  watch.start();
+  rlink.command(MOTOR_3_GO,127); //anticlowise 90
+  //rlink.command(MOTOR_2_GO,100);
+  rlink.command(MOTOR_1_GO,127);
+  //rlink.command(MOTOR_4_GO,100);
+  
+  
+  while (watch.read()< 1100)  {
+  }
+   watch.start();
+  rlink.command(MOTOR_3_GO,254); 
+  //rlink.command(MOTOR_2_GO,100);
+  rlink.command(MOTOR_1_GO,127);
+  //rlink.command(MOTOR_4_GO,100);
+  
+  
+  while (watch.read() < 5000)  {
+ }
+    
   return 0;
 }
