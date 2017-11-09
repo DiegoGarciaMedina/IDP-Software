@@ -9,11 +9,14 @@ using namespace std;
 
 robot_link rlink;
 
+
+
 void line_following() {
 
     vector<double> sensors ; //inputs
     int ms_r, ms_l, speed; //outputs
-
+    stopwatch watch;
+    watch.start();
 
     sensors [0] = rlink.request (READ_PORT_1); //sensor left
     sensors [1] = rlink.request (READ_PORT_2); // sensor middle
@@ -38,7 +41,7 @@ void line_following() {
 
   else // reverse
   {
-     ms_r = speed +127;
+     ms_r = (speed)/3 +127;
      ms_l = ms_r-127;
   }
 
