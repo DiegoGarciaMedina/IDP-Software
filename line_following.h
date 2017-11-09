@@ -15,9 +15,10 @@ void line_following(void) {
     int ms_r, ms_l, speed ,sensors ; //outputs
     stopwatch watch;
     watch.start();
-    speed =50;
+    speed =127;
 
 	sensors = rlink.request(READ_PORT_1);
+	cout << sensors << endl;
 
   if (sensors == 2|| sensors == 5||sensors ==7)   //keep going straight
   {
@@ -27,7 +28,7 @@ void line_following(void) {
   else if (sensors == 4||sensors == 6) // turn left
   {
      ms_r = speed;
-     ms_l = (ms_r)/2 + 127;
+     ms_l = ms_r/2 + 127;
   }
 
   else if (sensors == 1||sensors == 3)// turn right

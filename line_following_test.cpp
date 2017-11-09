@@ -5,10 +5,12 @@
 #include <robot_link.h>
 using namespace std;
 #define ROBOT_NUM 14
-#include "line_following.cpp"
+#include "line_following.h"
+int val;
+
 
 int main(){
-
+stopwatch watch;
 #ifdef __arm__
    if (!rlink.initialise ("127.0.0.1")) {          // setup for local hardware
 #else
@@ -28,10 +30,10 @@ int main(){
   }
   else {
     cout << "Test failed (bad value returned)" << endl;
-
-    stopwatch watch;
+}
     watch.start();
-    while watch.read()<10000{
+    while (watch.read()<10000){
 
         line_following();
     }
+}
