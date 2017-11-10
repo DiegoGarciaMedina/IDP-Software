@@ -10,7 +10,7 @@ int val;
 
 
 int main(){
-	int i;
+
 stopwatch watch;
 #ifdef __arm__
    if (!rlink.initialise ("127.0.0.1")) {          // setup for local hardware
@@ -33,15 +33,17 @@ stopwatch watch;
     cout << "Test failed (bad value returned)" << endl;
 }
     watch.start();
-    
-    while (watch.read() < 2000){
-    }
-	watch.start();
-	for(i=0;i<10000;i++) {
-      cout << i << endl;
-   }
-	int v = rlink.request(READ_PORT_1);
+
+	int t_ramp = 255; // no apparent difference changing the ramp from 0 to 255 
 	
-    cout << "The value requested from the sensors is " << v << endl;
-    cout << "The time taken to read the sensor 10000 times is " << watch.read() << "ms"<< endl;
+	rlink.command (RAMP_TIME, t_ramp);
+
+    int speed = 127; // 30 just let's the robot make it up the ramp
+    
+    rlink.command(MOTOR_1_GO, speed);
+    rlink.command(MOTOR_3_GO, speed + 127);
+    
+    while (watch.read() < 5000){
+    }
+    rlink.command (RAMP_TIME, t_ramp);
 }
