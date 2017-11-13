@@ -14,12 +14,26 @@ robot_link rlink;
 //ms_r:motor speed right
 //ms_l:motor speed left
 //speed: value that will be decided experimentally
+//distance: boolean value set to true if close to the wall
 
 int read_sensors_line_following(void){
+  double sensors_init;
   int sensors;
-  sensors = rlink.request(READ_PORT_1);
+  sensors_init = rlink.request(READ_PORT_1);
+  sensors_init += 0.5
+  int sensors = (int)sensors_init
   return (sensors)
+    }
 
+int distance_sensor(int sensors){
+  bool distance;
+  if(sensors<8){
+    distance = false;
+} 
+  else{
+    distance = true;
+} 
+}
 
 int line_following(int sensors) {
     int ms_r, ms_l, speed ,sensors ; //outputs
@@ -75,6 +89,7 @@ void turn_around(void){
 }
 
 void reverse_robot(void){
+
 }
 
 void straight_junction(void){ 
