@@ -9,7 +9,7 @@ using namespace std;
 
 robot_link rlink;
 
-
+//index of variables
 
 void line_following(void) {
     int ms_r, ms_l, speed ,sensors ; //outputs
@@ -49,3 +49,31 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 while (watch.read() < 500)  {
  }
   }
+
+void turn_left(speed) {
+
+
+}
+
+void turn_right(void) {
+}
+
+void turn_around(void){
+}
+
+void reverse_robot(void){
+}
+
+void straight_junction(void){
+}
+
+void stop(void){
+}
+
+void pick_up(void){
+}
+
+void drop_box(void){
+}
+
+
