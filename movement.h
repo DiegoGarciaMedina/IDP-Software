@@ -52,17 +52,70 @@ while (watch.read() < 500)  {
 
 void turn_left(speed) {
 
+int speed, ms_l, ms_r;
 
+speed = rlink.request(MOTOR_1); //reads the current motor speed
+
+ms_r = speed;
+ms_l = 0; //sets the motor speeds
+
+rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
+rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
+
+stopwatch watch;
+watch.start();
+while (watch.read()<1100){
+}
 }
 
 void turn_right(void) {
+
+int speed, ms_l, ms_r;
+
+speed = rlink.request(MOTOR_1); //reads the current motor speed
+
+ms_l = speed;
+ms_r = 0; //sets the motor speeds
+
+rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
+rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
+
+stopwatch watch;
+watch.start();
+while (watch.read()<1100){
+}
 }
 
 void turn_around(void){
+
+int speed, ms_l, ms_r;
+
+speed = rlink.request(MOTOR_1); //reads the current motor speed
+
+ms_l = speed;
+ms_r = 0; //sets the motor speeds
+
+rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
+rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
+
+stopwatch watch;
+watch.start();
+while (watch.read()<2200){
+}
 }
 
 void reverse_robot(void){
+int speed, ms_l, ms_r;
+
+speed = rlink.request(MOTOR_1);
+ms_r = (speed)/3 +127;
+ms_l = ms_r-127;
+
+rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
+rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
+
 }
+
 
 void straight_junction(void){
 }
