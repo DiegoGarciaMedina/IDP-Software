@@ -15,7 +15,7 @@ robot_link rlink;
 int main()
 {
   stopwatch watch;
-  int a=0,i,val;
+  int a=0,i,val,distance;
 
   if (!rlink.initialise (ROBOT_NUM)) { // setup the link
   cout << "Cannot initialise link" << endl;
@@ -35,6 +35,7 @@ int main()
 
   //from starting point facing P2
 
+  watch.start()
   turn_left();
   read_sensors_line_following();
   while (sensors != 7 && sensors =! 15){
@@ -45,12 +46,9 @@ int main()
     line_following(read_sensors_line_following());
   }
 
-  // in this part we shoul insert a test about the robot realising which way we have gone through the truntable
+  // in this part we should insert a test about the robot realising which way we have gone through the truntable
 
-  reverse_robot();
-  watch.start();
-  while (watch.read() <500){
-  }
+  reverse_robot(2000);
   turn_around(); 
   while (sensors != 7 && sensors =! 15){
     line_following(read_sensors_line_following());
@@ -72,11 +70,13 @@ int main()
     line_following(read_sensors_line_following());
   }
   straight_junction();
+  distance = distance_sensor()
   while (distance_sensor =! 1){
     line_following(read_sensors_line_following());
+    distance = distance_sensor()
   }
   stop();
+  
 
-
-
+  return (watch.read());
 }

@@ -6,7 +6,6 @@
 using namespace std;
 #define ROBOT_NUM 14
 
-
 robot_link rlink;
 
 //index of variables
@@ -96,7 +95,7 @@ while (watch.read()<1100){
 
 void turn_right(void) {
 
-int speed, ms_l, ms_r;
+int speed, ms_l, ms_r, time_reverse;
 
 speed = rlink.request(MOTOR_1); //reads the current motor speed
 
@@ -129,7 +128,7 @@ while (watch.read()<2200){
 }
 }
 
-void reverse_robot(void){
+void reverse_robot(time_reverse){
 int speed, ms_l, ms_r;
 
 speed = rlink.request(MOTOR_1);
@@ -138,21 +137,25 @@ ms_l = ms_r-127;
 
 rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
+watch.start()
+while (watch.read()<time_reverse){
+}
 
 }
 
 void straight_junction(void){
-  double ms_r,ms_l
+double ms_r,ms_l;
   ms_r=rlink.request(MOTOR_1);
   ms_l=rlink.request(MOTOR_3);
   rlink.command(MOTOR_1_GO,ms_r);
   rlink.command(MOTOR_3_GO,ms_l);
+  watch.start();
   while (watch.read() < 500)  {
  }
 }
 
 void stop(void){
-  double ms_r,ms_l
+double ms_r,ms_l;
   ms_r=0;
   ms_l=0;
   rlink.command(MOTOR_1_GO,ms_r);
