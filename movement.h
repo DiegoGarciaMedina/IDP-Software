@@ -26,12 +26,12 @@ int read_sensors_line_following(void){
     }
 
 int distance_sensor(int sensors){
-  bool distance;
+  int distance;
   if(sensors<8){
-    distance = false;
+    distance = 0;
 }
   else{
-    distance = true;
+    distance = 1;
 }
 }
 
@@ -142,15 +142,17 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 }
 
 void straight_junction(void){
-  float ms_r,ms_l
+  double ms_r,ms_l
   ms_r=rlink.request(MOTOR_1);
   ms_l=rlink.request(MOTOR_3);
   rlink.command(MOTOR_1_GO,ms_r);
   rlink.command(MOTOR_3_GO,ms_l);
+  while (watch.read() < 500)  {
+ }
 }
 
 void stop(void){
-  float ms_r,ms_l
+  double ms_r,ms_l
   ms_r=0;
   ms_l=0;
   rlink.command(MOTOR_1_GO,ms_r);
