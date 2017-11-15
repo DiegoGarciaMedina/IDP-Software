@@ -391,7 +391,7 @@ void D2orD5_path(string InitialPoint){
 	  stop();
 	}
 
-void D3orD6_path(){
+void D3orD6_path(string InitialPoint){
 	int speed_motor1, speed_motor2;
 	bool turned_left = false, turned_right = false;
 	if (InitialPoint == "P1"){ //choose detination depending on orientation of turn table
