@@ -5,8 +5,7 @@
 #include <robot_link.h>
 using namespace std;
 #define ROBOT_NUM 14
-
-robot_link rlink;
+extern robot_link rlink;
 
 //index of variables
 //sensors:decimal number corresponding to the binary number made by sesnsors being set or off
@@ -15,16 +14,17 @@ robot_link rlink;
 //speed: value that will be decided experimentally
 //distance: boolean value set to true if close to the wall
 
-int read_sensors_line_following(void){
+
+/*int read_sensors_line_following(void){
   double sensors_init;
   int sensors;
   sensors_init = rlink.request(READ_PORT_1);
   sensors_init += 0.5
   int sensors = (int)sensors_init
   return (sensors)
-    }
+    }*/
 
-int distance_sensor(int sensors){
+/*int distance_sensor(int sensors){
   int distance;
   if(sensors<8){
     distance = 0;
@@ -32,10 +32,10 @@ int distance_sensor(int sensors){
   else{
     distance = 1;
 }
-}
+}*/
 
 int line_following(int sensors) {
-    int ms_r, ms_l, speed ,sensors ; //outputs
+    int ms_r, ms_l, speed; //outputs
     stopwatch watch;
     watch.start();
     speed =127;
@@ -58,7 +58,7 @@ int line_following(int sensors) {
   }
 
   else if (sensors == 7|| sensors == 15){
-    return (sensors)}
+    return (sensors);}
 
   else // reverse
   {
@@ -72,10 +72,10 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 while (watch.read() < 500)  {
  }
 
- return(sensors)
+ return(sensors);
   }
 
-void turn_left(speed) {
+/*void turn_left(speed) {
 
 int speed, ms_l, ms_r;
 
@@ -167,5 +167,5 @@ void pick_up(void){
 
 void drop_box(void){
 }
-
+*/
 
