@@ -11,7 +11,7 @@ int val;
 
 
 int main(){
-int V5;
+int V5,sensors,TIME;
 stopwatch watch;
 
 #ifdef __arm__
@@ -37,13 +37,17 @@ stopwatch watch;
     
 watch.start();
     
-  while (watch.read() < 5000){
+  while (watch.read() < 500000){
 	rlink.command(WRITE_PORT_5,255);
 	V5 = rlink.request(READ_PORT_5);
-	int sensors = 255-V5;
+	sensors = 255-V5;
+	if (sensors > 7){
+		sensors = sensors - 8;}
 	line_following(sensors);
+	if (sensors == 0)
+	{break;}
     cout << sensors  << endl;
-    int TIME = watch.read();
+    TIME = watch.read();
     while (watch.read()-TIME < 250){}
   }
 
