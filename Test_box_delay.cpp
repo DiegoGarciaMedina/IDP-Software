@@ -36,7 +36,7 @@ stopwatch watch;
   int v = rlink.request(READ_PORT_1);
   watch.start();
     
-  while (rlink.request(READ_PORT_1) != v){
+  while (v == rlink.request(READ_PORT_1)){
     }
 
   cout << watch.read() << endl;

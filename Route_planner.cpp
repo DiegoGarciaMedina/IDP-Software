@@ -22,6 +22,7 @@ int main(){
    if (!rlink.initialise (ROBOT_NUM)) {
 	   // setup the link
 #endif
+}
 
   val = rlink.request (TEST_INSTRUCTION); // send test instruction
   if (val == TEST_INSTRUCTION_RESULT) {   // check result
