@@ -37,15 +37,15 @@ stopwatch watch;
     
 watch.start();
     
-  while (watch.read() < 500000){
+  while (watch.read() < 100000){
 	rlink.command(WRITE_PORT_5,255);
 	V5 = rlink.request(READ_PORT_5);
 	sensors = 255-V5;
-	if (sensors > 7){
-		sensors = sensors - 8;}
+	cout << V5 << endl;
+	sensors = 15-sensors;
 	line_following(sensors);
-	if (sensors == 0)
-	{break;}
+	if (sensors == 15)
+		{break;}
     cout << sensors  << endl;
     TIME = watch.read();
     while (watch.read()-TIME < 250){}
