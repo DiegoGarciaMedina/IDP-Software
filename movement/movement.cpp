@@ -39,36 +39,70 @@ int line_following(int sensors) {
     stopwatch watch;
     watch.start();
     speed =100;
-
-    if (sensors == 2|| sensors == 5|| sensors == 10 || sensors == 13)  //keep going straight
-  {
-     ms_r = speed;
-     ms_l = ms_r + 127;
-  }
-  else if (sensors == 4||sensors == 6|| sensors == 12|| sensors == 14) // turn left
-  {
-     ms_r = speed;
-     ms_l = ms_r/2 + 127;
-  }
-
-  else if (sensors == 1||sensors == 3|| sensors == 9|| sensors == 11)// turn right
-  {
-     ms_l = speed +127;
-     ms_r = (ms_l-127)/2;
-  }
-
-  else if (sensors == 0|| sensors == 15){
-	  
-	ms_l = 0;
-    ms_r = 0;
-    }
-
-  else // reverse
-  {
-     //ms_r = (speed)/3 +127;
-     //ms_l = ms_r-127;
-  }
-
+    switch(sensors){
+		case 0:
+		ms_r = (speed)/3 +127;
+		ms_l = ms_r-127; 
+		break; 
+		case 6:
+		ms_r = speed;
+		ms_l = ms_r + 127;
+		break;
+		case 15: 
+		ms_r = 0; 
+		ms_l = 0;
+		break;
+		case 1:
+		ms_l = speed +127;
+		ms_r = (ms_l-127)/4;
+		break;
+		case 2:
+		ms_l = speed +127;
+		ms_r = (ms_l-127)/2;
+		break;
+		case 3:
+		ms_l = speed +127;
+		ms_r = 0; // (ms_l)/2 if we want the right wheel to reverse
+		break;
+		case 7:
+		ms_l = speed +127;
+		ms_r = 0; // (ms_l)/2 if we want the right wheel to reverse
+		break;
+		case 4:
+		ms_r = speed;
+		ms_l = ms_r/2 + 127;
+		break;
+		case 8:
+		ms_r = speed;
+		ms_l = ms_r/4 + 127;
+		break;
+		case 12:
+		ms_r = speed;
+		ms_l = 0;
+		break;
+		case 14:
+		ms_r = speed;
+		ms_l = 0;
+		break;
+		case 5:
+		cout << "something is seriously wrong" << endl;
+		break;
+		case 9:
+		cout << "something is seriously wrong" << endl;
+		break;
+		case 10:
+		cout << "something is seriously wrong" << endl;
+		break;
+		case 11:
+		cout << "something is seriously wrong" << endl;
+		break;
+		case 13:
+		cout << "something is seriously wrong" << endl;
+		break;
+		default : cout << "just stop trying" << endl;
+		break;
+	}
+		
 rlink.command(MOTOR_3_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_1_GO,ms_l); //update the left motor speed
 
