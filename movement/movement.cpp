@@ -42,14 +42,14 @@ int line_following(int sensors) {
     switch(sensors){
 		case 0:
 		ms_r = (speed)/3 +127;
-		ms_l = ms_r-127; 
-		break; 
+		ms_l = ms_r-127;
+		break;
 		case 6:
 		ms_r = speed;
 		ms_l = ms_r + 127;
 		break;
-		case 15: 
-		ms_r = 0; 
+		case 15:
+		ms_r = 0;
 		ms_l = 0;
 		break;
 		case 1:
@@ -102,7 +102,7 @@ int line_following(int sensors) {
 		default : cout << "just stop trying" << endl;
 		break;
 	}
-		
+
 rlink.command(MOTOR_3_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_1_GO,ms_l); //update the left motor speed
 
@@ -110,11 +110,9 @@ rlink.command(MOTOR_1_GO,ms_l); //update the left motor speed
  return(sensors);
   }
 
-/*void turn_left(speed) {
+void turn_left(int speed) {
 
-int speed, ms_l, ms_r;
-
-speed = rlink.request(MOTOR_1); //reads the current motor speed
+int ms_l, ms_r;
 
 ms_r = speed;
 ms_l = 0; //sets the motor speeds
@@ -128,11 +126,9 @@ while (watch.read()<1100){
 }
 }
 
-void turn_right(void) {
+void turn_right(int speed) {
 
-int speed, ms_l, ms_r, time_reverse;
-
-speed = rlink.request(MOTOR_1); //reads the current motor speed
+int ms_l, ms_r, time_reverse;
 
 ms_l = speed;
 ms_r = 0; //sets the motor speeds
@@ -146,7 +142,7 @@ while (watch.read()<1100){
 }
 }
 
-void turn_around(void){
+/*void turn_around(void){
 int speed, ms_l, ms_r;
 
 speed = rlink.request(MOTOR_1); //reads the current motor speed
