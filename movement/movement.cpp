@@ -110,35 +110,34 @@ rlink.command(MOTOR_1_GO,ms_l); //update the left motor speed
  return(sensors);
   }
 
-void turn_left(int speed) {
-
-int ms_l, ms_r;
-
+void turn_left(void) {
+int speed, ms_l, ms_r;
+speed = 100;
 ms_r = speed;
-ms_l = 0; //sets the motor speeds
+ms_l = speed; //sets the motor speeds
 
 rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<1100){
+while (watch.read()<1200){
 }
 }
 
-void turn_right(int speed) {
+void turn_right(void) {
 
-int ms_l, ms_r, time_reverse;
-
-ms_l = speed;
-ms_r = 0; //sets the motor speeds
+int ms_l, ms_r,speed;
+speed = 100;
+ms_l = 127 +speed;
+ms_r = ms_l; //sets the motor speeds
 
 rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<1100){
+while (watch.read()<1200){
 }
 }
 
