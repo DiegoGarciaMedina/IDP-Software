@@ -9,7 +9,6 @@ robot_link rlink;
 #include "movement.h"
 int val;
 
-
 int main(){
 int V5,sensors,TIME;
 stopwatch watch;
@@ -50,7 +49,7 @@ watch.start();
     TIME = watch.read();
     while (watch.read()-TIME < 250){}
   }
-
+	
   cout << watch.read() << endl;
  return 0;
 }
