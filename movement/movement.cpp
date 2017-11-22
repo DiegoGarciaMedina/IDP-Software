@@ -204,35 +204,25 @@ void drop_box(void){
 }
 */
 
-string turn_detection(sensors)
+string turn_detection(sensors,turn)
 {
-    int left, right;
-    string turn;
-    left = right = 0
+    int turn;
 switch (sensors){
 case 1:
 case 2:
 case 3:
 case 7:
-    right +=1;
+    turn +=1;
     break;
 case 4:
 case 8:
 case 12:
 case 14:
-    left +=1;
+    turn -=1;
     break;
 default:
     break;
 }
-
-if (right < left ){
-    turn = "left";}
-else if (left < right){
-    turn = "right";}
-else{
-    turn = "right";} //this is a safety feature in case of unforeseen circumstances, it will just turn right.
-
 return(turn);
 }
 }
