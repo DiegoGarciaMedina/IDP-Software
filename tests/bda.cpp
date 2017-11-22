@@ -104,7 +104,7 @@ watch.start();
 	rlink.command(WRITE_PORT_5,255);
 	sensors = 15 -(255-rlink.request(READ_PORT_5));
 	line_following(sensors);
-	straight_junction(sensors);
+	straight_junction(sensors);}
 
 watch.start();
 
