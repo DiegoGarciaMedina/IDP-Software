@@ -9,14 +9,13 @@ using namespace std;
 robot_link rlink;
 #include "movement.h"
 int val,sensors, TIME;
-bool wall;
-
+bool distance_sensor;
 
 
 //test 1 Start robot pointing towards the ramp, turn left, at junction turn right, keep straight over other junction and stop when it detects a wall
 
 void test_1(void)
-	{wall = false;
+	{distance_sensor() = false;
 	stopwatch watch;
 	watch.start();
 	speed = 100;
@@ -42,11 +41,8 @@ void test_1(void)
     while (watch.read()<1000000)
     {
 		sensors = 15 -(255-rlink.request(READ_PORT_5));
-		if (sensors == 15)
-			{cout << "Junction detected whooop"<<endl;
-				sensors = 6;}
-		line_following(sensors);
-		if (wall == true)
+		straight_junction(sensors)
+		if (distance_sensor == true)
 			{break;}
     }
  }
@@ -60,11 +56,7 @@ watch.start();
 	rlink.command(WRITE_PORT_5,255);
 	sensors = 15 -(255-rlink.request(READ_PORT_5));
 	line_following(sensors);
-	if (sensors == 15)
-		{line_following(6);
-		watch.start();
-		while (watch.read()<150){}
-		break;}}
+	straight_junction(sensors);
 
 watch.start();
 
@@ -104,7 +96,6 @@ watch.start();
 void test_3()//test 3 Start 20 cm from collection point and go towards it and get aligned for pick-up. Show that robot knows that it has arrived at collection point.
 {
 rlink.command(WRITE_PORT_2,255); //setting all the bits to 1
-bool distance_sensor;
 distance_sensor = false;
 stopwatch watch;
 watch.start();
@@ -113,11 +104,7 @@ watch.start();
 	rlink.command(WRITE_PORT_5,255);
 	sensors = 15 -(255-rlink.request(READ_PORT_5));
 	line_following(sensors);
-	if (sensors == 15)
-		{line_following(6);
-		watch.start();
-		while (watch.read()<150){}
-		break;}}
+	straight_junction(sensors);
 
 watch.start();
 
