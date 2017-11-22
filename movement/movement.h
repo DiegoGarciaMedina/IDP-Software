@@ -18,5 +18,6 @@ void straight_junction(int sensors);
 void stop(void);
 void pick_up(void);
 void drop_box(void);
+string turn_detection(int sensors);
 
 
