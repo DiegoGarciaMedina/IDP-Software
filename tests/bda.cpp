@@ -32,11 +32,11 @@ void test_1(void)
 		if (sensors == 15)
 			{break;}
     }
-	watch.start();  
+	watch.start();
     while (watch.read()<800)
 		{rlink.command(MOTOR_3_GO,speed);
 		rlink.command(MOTOR_1_GO,speed+127);}
-		
+
     turn_right(); // 90 degrees stationary right turn
 
     while (watch.read()<1000000)
@@ -55,7 +55,7 @@ void test_2(void)
 {
 stopwatch watch;
 watch.start();
-    
+
   while (watch.read() < 100000){
 	rlink.command(WRITE_PORT_5,255);
 	sensors = 15 -(255-rlink.request(READ_PORT_5));
@@ -65,9 +65,9 @@ watch.start();
 		watch.start();
 		while (watch.read()<150){}
 		break;}}
-	
+
 watch.start();
-    
+
   while (watch.read() < 100000){
 	rlink.command(WRITE_PORT_5,255);
 	sensors = 15 -(255-rlink.request(READ_PORT_5));
@@ -78,16 +78,16 @@ watch.start();
     TIME = watch.read();
     while (watch.read()-TIME < 250){}
   }
-	
+
   watch.start();
-  
-  while (watch.read()<2000){	
+
+  while (watch.read()<2000){
 	rlink.command(MOTOR_3_GO,50+127); //update the right motor speed
 	rlink.command(MOTOR_1_GO,50); //update the left motor speed
   }
-	
+
   watch.start();
-  
+
   while (watch.read() < 200){
 	rlink.command(WRITE_PORT_5,255);
 	sensors = 15 -(255-rlink.request(READ_PORT_5));
@@ -96,16 +96,59 @@ watch.start();
     TIME = watch.read();
     while (watch.read()-TIME < 250){}
   }
-	
+
   cout << watch.read() << endl;
-  
+
 }
-/*
+
 void test_3()//test 3 Start 20 cm from collection point and go towards it and get aligned for pick-up. Show that robot knows that it has arrived at collection point.
 {
+rlink.command(WRITE_PORT_2,255); //setting all the bits to 1
+bool distance_sensor;
+distance_sensor = false;
+stopwatch watch;
+watch.start();
 
-}*/
- 
+  while (watch.read() < 100000){
+	rlink.command(WRITE_PORT_5,255);
+	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	line_following(sensors);
+	if (sensors == 15)
+		{line_following(6);
+		watch.start();
+		while (watch.read()<150){}
+		break;}}
+
+watch.start();
+
+  while (watch.read() < 100000){
+	rlink.command(WRITE_PORT_5,255);
+	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	line_following(sensors);
+	if (distance_sensor == true)
+		{break;}
+  }
+
+  watch.start();
+  while (watch.read()<2000){
+	rlink.command(MOTOR_3_GO,50+127); //update the right motor speed
+	rlink.command(MOTOR_1_GO,50); //update the left motor speed
+  }
+
+  watch.start();
+
+  while (watch.read() < 200){
+	rlink.command(WRITE_PORT_5,255);
+	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	line_following(sensors);
+	cout << sensors  << endl;
+    TIME = watch.read();
+    while (watch.read()-TIME < 250){}
+    rlink.command(WRITE_PORT_2,127);
+    cout << "A box has been detected and ready to pick up"<< endl; //When it has detected the box
+  }
+}
+
 int main(){
 stopwatch watch;
 
@@ -133,6 +176,6 @@ stopwatch watch;
 
 	//test_1();
 	test_2();
-	
+	//test_3();
 	return 0;
-}	
+}
