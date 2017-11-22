@@ -13,6 +13,8 @@ extern robot_link rlink;
 //ms_l:motor speed left
 //speed: value that will be decided experimentally
 //distance: boolean value set to true if close to the wall
+//left:left turn detected (integer increases by 1 every time that the line following detects a left left)
+//right: right turn detected(integer increases by 1 every time that the line following detects a right left)
 
 
 /*int read_sensors_line_following(void){
@@ -173,23 +175,26 @@ while (watch.read()<time_reverse){
 
 }
 
-void straight_junction(void){
-double ms_r,ms_l;
-  ms_r=rlink.request(MOTOR_1);
-  ms_l=rlink.request(MOTOR_3);
-  rlink.command(MOTOR_1_GO,ms_r);
-  rlink.command(MOTOR_3_GO,ms_l);
-  watch.start();
-  while (watch.read() < 500)  {
- }
+*/
+
+void straight_junction(sensors){
+  if (sensors == 15)
+		{line_following(6);
+		watch.start();
+		while (watch.read()<150){}
+		break;
+		cout <<"Junction has been detected and gone straight though"<<endl;}
 }
 
+/*
 void stop(void){
 double ms_r,ms_l;
   ms_r=0;
   ms_l=0;
   rlink.command(MOTOR_1_GO,ms_r);
   rlink.command(MOTOR_3_GO,ms_l);
+
+
 }
 
 void pick_up(void){

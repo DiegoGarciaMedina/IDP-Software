@@ -14,7 +14,7 @@ int turn_left(void);
 int turn_right(void);
 void turn_around(void);
 int reverse_robot(int time_reverse);
-void straight_junction(void);
+void straight_junction(int sensors);
 void stop(void);
 void pick_up(void);
 void drop_box(void);
