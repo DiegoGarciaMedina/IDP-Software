@@ -15,7 +15,7 @@ bool distance_sensor;
 //test 1 Start robot pointing towards the ramp, turn left, at junction turn right, keep straight over other junction and stop when it detects a wall
 
 void test_1(void)
-	{distance_sensor() = false;
+	{distance_sensor = false;
 	stopwatch watch;
 	watch.start();
 	speed = 100;
@@ -26,7 +26,7 @@ void test_1(void)
     rlink.command(WRITE_PORT_5,255);
     while (watch.read()<50000)
     {
-		sensors = 15 -(255-rlink.request(READ_PORT_5));
+		sensors = rlink.request(READ_PORT_5) & 15;
 		line_following(sensors);
 		if (sensors == 15)
 			{break;}
@@ -37,11 +37,16 @@ void test_1(void)
 		rlink.command(MOTOR_1_GO,speed+127);}
 
     turn_right(); // 90 degrees stationary right turn
+	watch.start();
+	while (watch.read()<100){}
 
     while (watch.read()<1000000)
     {
-		sensors = 15 -(255-rlink.request(READ_PORT_5));
-		straight_junction(sensors)
+		sensors = rlink.request(READ_PORT_5) & 15;
+		
+		straight_junction(sensors);
+		int distance =  rlink.request (ADC0);
+		if (distance > 100){distance_sensor = true;} 
 		if (distance_sensor == true)
 			{break;}
     }
@@ -51,18 +56,24 @@ void test_2(void)
 {
 stopwatch watch;
 watch.start();
+rlink.command(WRITE_PORT_5,255);
 
   while (watch.read() < 100000){
-	rlink.command(WRITE_PORT_5,255);
-	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	sensors = rlink.request(READ_PORT_5) & 15;
+	int DeleteMe = 15 -(255-rlink.request(READ_PORT_5));
+	cout << sensors << " " << DeleteMe << endl;
 	line_following(sensors);
-	straight_junction(sensors);
+	if (sensors == 15){
+		break;}
+	}
+
+straight_junction(sensors);
 
 watch.start();
 
   while (watch.read() < 100000){
 	rlink.command(WRITE_PORT_5,255);
-	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	sensors = rlink.request(READ_PORT_5) & 15;
 	line_following(sensors);
 	if (sensors == 15)
 		{break;}
@@ -73,16 +84,16 @@ watch.start();
 
   watch.start();
 
-  while (watch.read()<2000){
+  while (watch.read()<2200){
 	rlink.command(MOTOR_3_GO,50+127); //update the right motor speed
 	rlink.command(MOTOR_1_GO,50); //update the left motor speed
   }
 
   watch.start();
 
-  while (watch.read() < 200){
+  while (watch.read() < 800){
 	rlink.command(WRITE_PORT_5,255);
-	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	sensors = rlink.request(READ_PORT_5) & 15;
 	line_following(sensors);
 	cout << sensors  << endl;
     TIME = watch.read();
@@ -102,7 +113,7 @@ watch.start();
 
   while (watch.read() < 100000){
 	rlink.command(WRITE_PORT_5,255);
-	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	sensors = rlink.request(READ_PORT_5) & 15;
 	line_following(sensors);
 	straight_junction(sensors);}
 
@@ -110,7 +121,7 @@ watch.start();
 
   while (watch.read() < 100000){
 	rlink.command(WRITE_PORT_5,255);
-	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	sensors = rlink.request(READ_PORT_5) & 15;
 	line_following(sensors);
 	if (distance_sensor == true)
 		{break;}
@@ -126,7 +137,7 @@ watch.start();
 
   while (watch.read() < 200){
 	rlink.command(WRITE_PORT_5,255);
-	sensors = 15 -(255-rlink.request(READ_PORT_5));
+	sensors = rlink.request(READ_PORT_5) & 15;
 	line_following(sensors);
 	cout << sensors  << endl;
     TIME = watch.read();
@@ -162,7 +173,46 @@ stopwatch watch;
 }
 
 	//test_1();
-	test_2();
+	//test_2();
 	//test_3();
+	
+	int i;
+	watch.start();
+	/*
+	int A0 ;
+
+	while(watch.read() < 50000){
+		A0 = rlink.request (ADC0);
+
+		cout << A0 <<  " " << A1 << " " << A2 << " " << A3 << " " << A4 <<  " " << A5 << " " << A6 << " " << A7 << endl;
+	}
+
+	int i;
+	
+	rlink.command(WRITE_PORT_2,253);
+	*/ 
+	 
+	
+	/*
+	for (i=0;i<10;i++) {
+		watch.start();
+		rlink.command(WRITE_PORT_2,2);
+		
+		while (watch.read()<5000){}
+		rlink.command(WRITE_PORT_2,253);
+		while (watch.read()<10000){}
+}
+*/
+	for (i=0;i<10;i++){
+		watch.start();
+		while (watch.read() < 2000){
+			rlink.command(WRITE_PORT_2,255);
+		}
+		watch.start();
+		while (watch.read() < 2000){
+			rlink.command(WRITE_PORT_2,0);
+		}
+	}
+	
 	return 0;
 }

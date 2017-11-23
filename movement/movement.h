@@ -8,7 +8,7 @@ using namespace std;
 int speed, time_reverse;
 
 int read_sensors_line_following();
-int distance_sensor(int sensors);
+//bool distance_sensor(int sensors);
 int line_following(int sensors);
 int turn_left(void);
 int turn_right(void);

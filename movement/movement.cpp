@@ -7,6 +7,8 @@ using namespace std;
 #define ROBOT_NUM 14
 extern robot_link rlink;
 
+stopwatch watch;
+
 //index of variables
 //sensors:decimal number corresponding to the binary number made by sesnsors being set or off
 //ms_r:motor speed right
@@ -38,7 +40,9 @@ extern robot_link rlink;
 
 int line_following(int sensors) {
     int ms_r, ms_l, speed; //outputs
-    stopwatch watch;
+    
+    cout << sensors << endl;
+    
     watch.start();
     speed =100;
     switch(sensors){
@@ -139,7 +143,7 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<1200){
+while (watch.read()<1400){ //1200
 }
 }
 
@@ -177,13 +181,11 @@ while (watch.read()<time_reverse){
 
 */
 
-void straight_junction(sensors){
-  if (sensors == 15)
-		{line_following(6);
-		watch.start();
-		while (watch.read()<150){}
-		break;
-		cout <<"Junction has been detected and gone straight though"<<endl;}
+void straight_junction(int sensors){
+	line_following(6);
+	watch.start();
+	while (watch.read()<150){}
+	cout <<"Junction has been detected and gone straight though"<<endl;
 }
 
 /*
@@ -204,9 +206,9 @@ void drop_box(void){
 }
 */
 
-string turn_detection(sensors,turn)
+int turn_detection(int sensors,int turn)
 {
-    int turn;
+
 switch (sensors){
 case 1:
 case 2:
@@ -225,5 +227,5 @@ default:
 }
 return(turn);
 }
-}
+
 
