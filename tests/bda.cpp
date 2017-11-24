@@ -15,7 +15,9 @@ bool distance_sensor;
 //test 1 Start robot pointing towards the ramp, turn left, at junction turn right, keep straight over other junction and stop when it detects a wall
 
 void test_1(void)
-	{distance_sensor = false;
+	{
+	int distance;
+	distance_sensor = false;
 	stopwatch watch;
 	watch.start();
 	speed = 100;
@@ -38,18 +40,26 @@ void test_1(void)
 
     turn_right(); // 90 degrees stationary right turn
 	watch.start();
-	while (watch.read()<100){}
+	
 
     while (watch.read()<1000000)
     {
-		sensors = rlink.request(READ_PORT_5) & 15;
 		
-		straight_junction(sensors);
-		int distance =  rlink.request (ADC0);
-		if (distance > 100){distance_sensor = true;} 
-		if (distance_sensor == true)
-			{break;}
-    }
+		sensors = rlink.request(READ_PORT_5) & 15;
+		line_following(sensors);
+		if (sensors == 15){break;}
+	}	
+		straight_junction();
+		
+	while (watch.read()<1000000){
+		distance = 0;
+		distance =  rlink.request (ADC0);
+		sensors = rlink.request(READ_PORT_5) & 15;
+		line_following(sensors);
+		cout << distance << endl;
+		if (distance > 115){break;}
+    }    
+    cout << "Wall found!" <<  endl;
  }
 
 void test_2(void)
@@ -67,7 +77,7 @@ rlink.command(WRITE_PORT_5,255);
 		break;}
 	}
 
-straight_junction(sensors);
+straight_junction();
 
 watch.start();
 
@@ -106,36 +116,41 @@ watch.start();
 
 void test_3()//test 3 Start 20 cm from collection point and go towards it and get aligned for pick-up. Show that robot knows that it has arrived at collection point.
 {
+int distance;
 rlink.command(WRITE_PORT_2,255); //setting all the bits to 1
-distance_sensor = false;
 stopwatch watch;
 watch.start();
 
   while (watch.read() < 100000){
-	rlink.command(WRITE_PORT_5,255);
+	
 	sensors = rlink.request(READ_PORT_5) & 15;
+	if (sensors == 15){break;}
 	line_following(sensors);
-	straight_junction(sensors);}
+	}
+	
+	straight_junction();
 
 watch.start();
 
-  while (watch.read() < 100000){
-	rlink.command(WRITE_PORT_5,255);
+while (watch.read() < 100000){
+	distance = 0;
+	distance =  rlink.request (ADC0);
 	sensors = rlink.request(READ_PORT_5) & 15;
 	line_following(sensors);
-	if (distance_sensor == true)
-		{break;}
-  }
+	cout << distance << endl;
+	if (distance > 125){break;}
+	}
+
 
   watch.start();
-  while (watch.read()<2000){
+  while (watch.read()<800){
 	rlink.command(MOTOR_3_GO,50+127); //update the right motor speed
 	rlink.command(MOTOR_1_GO,50); //update the left motor speed
   }
 
   watch.start();
 
-  while (watch.read() < 200){
+  while (watch.read() < 500){
 	rlink.command(WRITE_PORT_5,255);
 	sensors = rlink.request(READ_PORT_5) & 15;
 	line_following(sensors);
@@ -174,10 +189,10 @@ stopwatch watch;
 
 	//test_1();
 	//test_2();
-	//test_3();
-	
+	test_3();
+	/*
 	int i;
-	watch.start();
+	watch.start();*/
 	/*
 	int A0 ;
 
@@ -203,6 +218,7 @@ stopwatch watch;
 		while (watch.read()<10000){}
 }
 */
+/*
 	for (i=0;i<10;i++){
 		watch.start();
 		while (watch.read() < 2000){
@@ -213,6 +229,6 @@ stopwatch watch;
 			rlink.command(WRITE_PORT_2,0);
 		}
 	}
-	
+	*/
 	return 0;
 }

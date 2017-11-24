@@ -41,7 +41,7 @@ stopwatch watch;
 int line_following(int sensors) {
     int ms_r, ms_l, speed; //outputs
     
-    cout << sensors << endl;
+    //cout << sensors << endl;
     
     watch.start();
     speed =100;
@@ -127,7 +127,7 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<1200){
+while (watch.read()<1100){
 }
 }
 
@@ -181,7 +181,7 @@ while (watch.read()<time_reverse){
 
 */
 
-void straight_junction(int sensors){
+void straight_junction(){
 	line_following(6);
 	watch.start();
 	while (watch.read()<150){}
