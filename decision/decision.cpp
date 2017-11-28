@@ -5,11 +5,12 @@
 using namespace std;
 #define ROBOT_NUM 14
 int val, stat;
+#include "movement.h"
 
 robot_link rlink;
 stopwatch watch;
 
-void path_choice(string BoxType, string InitialPoint){
+void path_choice(int BoxType, string InitialPoint){
   switch (BoxType){
   case "O/C": D1(InitialPoint);
     cout << "O/C detected, heading to D1." << endl;
@@ -32,18 +33,20 @@ void D1_path(string InitialPoint){
 	  /*THIS IS THE DELIVERY PART*/
 	  reverse(1100); // 1.1 seconds
 	  turn_right();
-	  sensor_value = line_following();
-	  while (sensor_value != 7 && sensor_value != 15){
-		  sensor_value = line_following();
+	  int sensor_value = sensors_read();
+	  while (sensor_value!= 15){
+		  sensor_value = line_following(sensor_value);
+		  sensor_value = sensors_read();
 	  }
 	  straight_junction();
-	  bool wall = distance_sensor();
+	  sensor_value = sensors_read();
+	  bool wall = object_ahead();
 	  while (wall != true){
-		  sensor_value = line_following();
-		  wall = distance_sensor();
+		  sensor_value = line_following(sensor_value);
+		  wall = object_ahead();
 	  }
 	  stop();
-	  delivery_mechanism(); // **YET TO BE DONE** Specify height!!!
+	  drop_box(1); // **YET TO BE DONE** Specify height!!!
 
 	  /*RETURN HOME*/
 	  reverse(1100); // 1.1 seconds

@@ -19,7 +19,7 @@ stopwatch watch;
 //right: right turn detected(integer increases by 1 every time that the line following detects a right left)
 
 int line_following(int sensors) {
-    int ms_r, ms_l, speed; //outputs
+    int ms_r, ms_l,speed; //outputs
 
     //cout << sensors << endl;
 
@@ -151,7 +151,7 @@ ms_l = ms_r-127;
 
 rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
-watch.start()
+watch.start();
 while (watch.read()<time_reverse){
 }
 
@@ -170,7 +170,6 @@ int box_id(void){
   rlink.command(WRITE_PORT_2,255); //turning all LEDs off
 
   int v;
-  int DELAY;
   int box_type;
 
   rlink.command(WRITE_PORT_5,64);
@@ -194,7 +193,7 @@ int box_id(void){
 	  while(watch2.read() % 10 != 0){}
 	  v = rlink.request(READ_PORT_5) & 64;
 	  }
-  time_taken = watch2.read();
+  int time_taken = watch2.read();
 
   if (time_taken > 1500){
 	  box_type = 0 ;
@@ -219,20 +218,55 @@ int box_id(void){
 return (box_type);
 }
 
-void pick_up(void){ //needs writing
+void pick_up(int height){
+	int time,speedUP,speedDOWN;
+	
+	if (height == 0){time = 1500;speedUP=255;speedDOWN=speedUP-127;}
+	else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
+	watch.start();
+	rlink.command(WRITE_PORT_2,2); // OPENS
+	while (watch.read()<time){
+		rlink.command(MOTOR_4_GO,speedDOWN);//downwards
+	}
+	rlink.command(MOTOR_4_GO,0); //stop motor
+	rlink.command(WRITE_PORT_2,253); // CLOSES
+	watch.start();
+	while (watch.read()<time){
+		rlink.command(MOTOR_4_GO,speedUP);//upwards
+	}
+	rlink.command(MOTOR_4_GO,0); //stop motor
 }
 
-void drop_box(void){ // needs writing
+void drop_box(int height){
+	int time,speedUP,speedDOWN;
+	if (height == 0){time = 1500;speedUP=255;speedDOWN=speedUP-127;}
+	else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
+	watch.start();
+	while (watch.read()<time){
+		rlink.command(MOTOR_4_GO,speedDOWN);//downwards
+	}
+	rlink.command(MOTOR_4_GO,0); //stop motor
+	rlink.command(WRITE_PORT_2,2); // OPENS
+	watch.start();
+	while (watch.read()<1000){
+		// wait for bax to fall
+	}
+	rlink.command(WRITE_PORT_2,253); // CLOSES
+	watch.start();
+	while (watch.read()<1200){
+		rlink.command(MOTOR_4_GO,speedUP);//upwards
+	}
+	rlink.command(MOTOR_4_GO,0); //stop motor
 }
 
 int sensors_read(void){
     rlink.command(WRITE_PORT_5,255);
  int sensors = rlink.request(READ_PORT_5) &15;
- if (sensors <0){
-    sensors == 6;
+ if (sensors < 0){
+    sensors = 6;
  }
  else if (sensors > 15){
-    sensors == 6;
+    sensors = 6;
  }
  return (sensors);
 }
@@ -272,12 +306,10 @@ void alignment(void){
 watch.start();
 
   while (watch.read() < 100000){
-	sensors = sensors_read();
+	int sensors = sensors_read();
 	line_following(sensors);
 	if (sensors == 15)
 		{break;}
-    TIME = watch.read();
-    while (watch.read()-TIME < 250){}
   }
 
 reverse_robot(2200);
@@ -285,16 +317,15 @@ reverse_robot(2200);
 watch.start();
 
   while (watch.read() < 800){
-	sensors = sensor_read();
+	int sensors = sensors_read();
 	line_following(sensors);
-    TIME = watch.read();
-    while (watch.read()-TIME < 250){}
   }
 }
 
 void blind_turn(int turn){ //this will be a positive if it has turned right at the turntable, and negative if it has turned left
 //if it has turned left, it needs to blind turn right and vice versa
 //go straight
+int speed = 100;
 stopwatch watch;
 watch.start();
 while (watch.read()<2000)
@@ -314,6 +345,10 @@ else if (turn>0)
     rlink.command(MOTOR_3_GO,speed); //update the right motor speed
     rlink.command(MOTOR_1_GO,speed+127);
 }
-else {break;}
+}
+
+void stop(){
+	rlink.command(MOTOR_3_GO,0); 
+    rlink.command(MOTOR_1_GO,0);	
 }
 
