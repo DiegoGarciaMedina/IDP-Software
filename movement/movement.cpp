@@ -97,6 +97,10 @@ rlink.command(MOTOR_1_GO,ms_l); //update the left motor speed
   }
 
 void turn_left(void) {
+	
+stopwatch watch_tl;
+watch_tl.start();
+while(watch_tl.read()<200){}
 int speed, ms_l, ms_r;
 speed = 127;
 ms_r = speed;
@@ -105,13 +109,17 @@ ms_l = speed; //sets the motor speeds
 rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
-stopwatch watch;
-watch.start();
-while (watch.read()<1000){
+stopwatch watch_turn;
+watch_turn.start();
+while (watch_turn.read()<1100){
 }
 }
 
 void turn_right(void) {
+
+stopwatch watch_tr;
+watch_tr.start();
+while(watch_tr.read()<200){}
 
 int ms_l, ms_r,speed;
 speed = 255;
@@ -123,7 +131,7 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<1000){ //1200
+while (watch.read()<900){ //1200
 }
 }
 
@@ -138,7 +146,7 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<3200){ //1200
+while (watch.read()<3000){ //1200
 }
 }
 
@@ -224,18 +232,18 @@ return (box_type);
 
 void pick_up(int height){
 	int time,speedUP,speedDOWN;
-	
-	if (height == 0){time = 3500;speedDOWN=255;speedUP=speedDOWN-127;}
+	stopwatch watch_pickup;
+	if (height == 0){time = 4500;speedDOWN=255;speedUP=speedDOWN-127;}
 	else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
-	watch.start();
+	watch_pickup.start();
 	rlink.command(WRITE_PORT_2,2); // OPENS
-	while (watch.read()<time){
+	while (watch_pickup.read()<time){
 		rlink.command(MOTOR_4_GO,speedDOWN);//downwards
 	}
 	rlink.command(MOTOR_4_GO,0); //stop motor
 	rlink.command(WRITE_PORT_2,253); // CLOSES
-	watch.start();
-	while (watch.read()<time){
+	watch_pickup.start();
+	while (watch_pickup.read()<time){
 		rlink.command(MOTOR_4_GO,speedUP);//upwards
 	}
 	rlink.command(MOTOR_4_GO,0); //stop motor
@@ -309,38 +317,31 @@ bool object_ahead(void){
 }
 
 void alignment_drop(void){
-watch.start();
 
-  while (watch.read() < 100000){
-	int sensors = sensors_read();
-	line_following(sensors);
-	if (sensors == 15)
-		{break;}
-  }
-
-reverse_robot(2200);
-
-watch.start();
-
-  while (watch.read() < 800){
-	int sensors = sensors_read();
-	line_following(sensors);
-  }
-  stop();
-}
-void alignment_pickup(void){
-watch.start();
-while (sensors != 15)
-	{line_following(sensors);
+stopwatch watch_drop;
+int sensors = sensors_read();
+  while (sensors != 15)
+  {line_following(sensors);
 	sensors = sensors_read();}
 	
-reverse_robot(500);
+reverse_robot(800);
 
-watch.start();
-  while (watch.read() < 500){
-	int sensors = sensors_read();
+  stop();
+  
+}
+void alignment_pickup(void){
+
+reverse_robot(700);
+
+stopwatch watch_alignment_pickup;
+watch_alignment_pickup.start();
+int sensors = sensors_read();
+  while (watch_alignment_pickup.read() < 998
+  ){
+	sensors = sensors_read();
 	line_following(sensors);
   }
+  //reverse_robot(10);
   stop();
 }
 
