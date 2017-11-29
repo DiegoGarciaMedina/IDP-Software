@@ -19,9 +19,9 @@ void drop_box(int);
 int turn_detection(int sensors, int turn);
 int sensors_read(void);
 bool object_ahead(void);
-void alignment(void);
+void alignment_drop(void);
 void blind_turn(int turn);
-void stop(void)
-
+void stop(void);
+void alignment_pickup(void);
 
 

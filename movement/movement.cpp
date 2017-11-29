@@ -98,7 +98,7 @@ rlink.command(MOTOR_1_GO,ms_l); //update the left motor speed
 
 void turn_left(void) {
 int speed, ms_l, ms_r;
-speed = 100;
+speed = 127;
 ms_r = speed;
 ms_l = speed; //sets the motor speeds
 
@@ -107,23 +107,23 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<1100){
+while (watch.read()<1000){
 }
 }
 
 void turn_right(void) {
 
 int ms_l, ms_r,speed;
-speed = 100;
-ms_l = 127 +speed;
-ms_r = ms_l; //sets the motor speeds
+speed = 255;
+ms_l = speed;
+ms_r = speed; //sets the motor speeds
 
 rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<1400){ //1200
+while (watch.read()<1000){ //1200
 }
 }
 
@@ -138,16 +138,15 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<2800){ //1200
+while (watch.read()<3200){ //1200
 }
 }
 
 void reverse_robot(int time_reverse){
-int speed, ms_l, ms_r;
+int ms_l, ms_r;
 
-speed = rlink.request(MOTOR_1);
-ms_r = (speed)/3 +127;
-ms_l = ms_r-127;
+ms_r = 100;
+ms_l = 227;
 
 rlink.command(MOTOR_1_GO,ms_r); //update the right motor speed
 rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
@@ -162,6 +161,11 @@ void straight_junction(void){
 	watch.start();
 	while (watch.read()<150){}
 	cout <<"Junction has been detected and gone straight though"<<endl;
+}
+
+void stop(void){
+	rlink.command(MOTOR_3_GO,0); 
+    rlink.command(MOTOR_1_GO,0);	
 }
 
 int box_id(void){
@@ -221,7 +225,7 @@ return (box_type);
 void pick_up(int height){
 	int time,speedUP,speedDOWN;
 	
-	if (height == 0){time = 1500;speedUP=255;speedDOWN=speedUP-127;}
+	if (height == 0){time = 3500;speedDOWN=255;speedUP=speedDOWN-127;}
 	else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
 	watch.start();
 	rlink.command(WRITE_PORT_2,2); // OPENS
@@ -239,7 +243,7 @@ void pick_up(int height){
 
 void drop_box(int height){
 	int time,speedUP,speedDOWN;
-	if (height == 0){time = 1500;speedUP=255;speedDOWN=speedUP-127;}
+	if (height == 0){time = 1500;speedDOWN=255;speedUP=speedDOWN-127;}
 	else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
 	watch.start();
 	while (watch.read()<time){
@@ -297,12 +301,14 @@ bool object_ahead(void){
     bool close_object = false;
     distance = 0;
     distance =  rlink.request (ADC0);
+    cout << distance << endl;
     if (distance > 115){
-        close_object = true;}
+        close_object = true;
+        cout<< "ive seen the wall"<< endl;}
     return (close_object);
 }
 
-void alignment(void){
+void alignment_drop(void){
 watch.start();
 
   while (watch.read() < 100000){
@@ -320,7 +326,24 @@ watch.start();
 	int sensors = sensors_read();
 	line_following(sensors);
   }
+  stop();
 }
+void alignment_pickup(void){
+watch.start();
+while (sensors != 15)
+	{line_following(sensors);
+	sensors = sensors_read();}
+	
+reverse_robot(500);
+
+watch.start();
+  while (watch.read() < 500){
+	int sensors = sensors_read();
+	line_following(sensors);
+  }
+  stop();
+}
+
 
 void blind_turn(int turn){ //this will be a positive if it has turned right at the turntable, and negative if it has turned left
 //if it has turned left, it needs to blind turn right and vice versa
@@ -347,8 +370,5 @@ else if (turn>0)
 }
 }
 
-void stop(){
-	rlink.command(MOTOR_3_GO,0); 
-    rlink.command(MOTOR_1_GO,0);	
-}
+
 
