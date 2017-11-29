@@ -4,14 +4,14 @@
 #include <robot_link.h>
 using namespace std;
 #define ROBOT_NUM 14
-int val, stat;
 #include "movement.h"
+stopwatch watch_turn;
 
-robot_link rlink;
-stopwatch watch;
+extern robot_link rlink;
+
 
 void D1_path(string);
-void D4_path(string);
+/*void D4_path(string);
 void D2orD5_path(string);
 void D3orD6_path(string);
 
@@ -34,14 +34,13 @@ void path_choice(int BoxType, string InitialPoint){
     D3orD6_path(InitialPoint);
   default : cout << "The box has not been properly classified!" << endl;
   }
-}
+}*/
 
 void D1_path(string InitialPoint){
   int i;
 
   if (InitialPoint == "P1"){
-	  /*THIS IS THE DELIVERY PART*/
-	  reverse_robot(1100); // 1.1 seconds
+	  //THIS IS THE DELIVERY PART
 	  turn_right();
 	  int sensor_value = sensors_read();
 	  while (sensor_value!= 15){
@@ -55,12 +54,13 @@ void D1_path(string InitialPoint){
 		  sensor_value = line_following(sensor_value);
 		  sensor_value = sensors_read();
 		  wall = object_ahead();
+		  cout<< wall << endl;
 	  }
 	  stop();
-	  alignment_drop();
-	  drop_box(1);
+	  //alignment_drop();
+	  //drop_box(1);
 
-	  /*RETURN HOME*/
+	  //RETURN HOME
 	  reverse_robot(1100); 
 	  turn_around();
 	  sensor_value = sensors_read();
@@ -79,18 +79,18 @@ void D1_path(string InitialPoint){
 	  alignment_pickup();
   }
   else {
-	  /*THIS IS THE DELIVERY PART*/
+	  //THIS IS THE DELIVERY PART
 	  reverse_robot(1100);
 	  turn_around();
-	  for (i=0;i<3;i++){ // repeat 3 times due to 3 intersections
-		  sensor_value = sensors_read();
+	  for (i=0;i<4;i++){ // repeat 3 times due to 3 intersections
+		  int sensor_value = sensors_read();
 		  while (sensor_value != 15){
 			  sensor_value = line_following(sensor_value);
 			  sensor_value = sensors_read();
 		  }
 		  straight_junction();
 	  }
-	  sensor_value = sensors_read();
+	  int sensor_value = sensors_read();
 	  while (sensor_value != 15){
 		  sensor_value = line_following(sensor_value);
 		  sensor_value = sensors_read(); 
@@ -105,17 +105,19 @@ void D1_path(string InitialPoint){
 	  bool wall = object_ahead();
 	  sensor_value = sensors_read();
 	  while (wall != true){
+		  cout<< wall << endl;
 		  sensor_value = line_following(sensor_value);
 		  wall = object_ahead();
 		  sensor_value = sensors_read();
 	  }
 	  stop();
-	  alignment_drop();
-	  drop_box(1); // **YET TO BE DONE**
+	  //alignment_drop();
+	  //drop_box(1); // **YET TO BE DONE**
 
-	  /*RETURN HOME*/
-	  reverse(1100);
+	  //RETURN HOME
+	  reverse_robot(1100);
 	  turn_around();
+	  reverse_robot(1000);
 	  sensor_value = sensors_read();
 	  sensor_value = line_following(sensor_value);
 	  while (sensor_value != 15){
@@ -128,8 +130,11 @@ void D1_path(string InitialPoint){
 		  sensor_value = line_following(sensor_value);
 		  sensor_value = sensors_read();
 	  }
+	  watch_turn.start();
+	  while (watch_turn.read()<1000){}
+	  reverse_robot(500);
 	  turn_left();
-	  for (i=0;i<3;i++){ // repeat 3 times due to 3 intersections
+	  for (i=0;i<4;i++){ // repeat 3 times due to 3 intersections
 		  sensor_value = sensors_read();
 		  while (sensor_value != 15){
 			  sensor_value = line_following(sensor_value);
@@ -145,11 +150,12 @@ void D1_path(string InitialPoint){
 	  stop();
 	  alignment_pickup();
   }
-}
+}}
+/*
 
 void D4_path(string InitialPoint){
 	if (InitialPoint == "P2"){
-	  /*THIS IS THE DELIVERY PART*/
+	  //THIS IS THE DELIVERY PART
 	  reverse_robot(1100);
 	  turn_left();
 	  sensor_value = sensors_read();
@@ -166,7 +172,7 @@ void D4_path(string InitialPoint){
 	  stop();
 	  delivery_mechanism(); // **YET TO BE DONE**
 
-	  /*RETURN HOME*/
+	  //RETURN HOME
 	  reverse(1100);
 	  turn_around();
 	  sensor_value = line_following();
@@ -188,7 +194,7 @@ void D4_path(string InitialPoint){
   }
 
   else {
-	  /*THIS IS THE DELIVERY PART*/
+	  //THIS IS THE DELIVERY PART
 	  reverse(1100);
 	  turn_around();
 	  for (i=0;i<3;i++){ // repeat 3 times due to 3 intersections
@@ -216,7 +222,7 @@ void D4_path(string InitialPoint){
 	  stop();
 	  delivery_mechanism(); // **YET TO BE DONE**
 
-	  /*RETURN HOME*/
+	  //RETURN HOME
 	  reverse(1100);
 	  turn_around();
 	  sensor_value = line_following();
@@ -250,7 +256,7 @@ void D2orD5_path(string InitialPoint){
 	int speed_motor1, speed_motor2;
 	bool turned_left = false, turned_right = false;
 	if (InitialPoint == "P1"){ //choose detination depending on orientation of turn table
-	  /*THIS IS THE DELIVERY PART*/
+	  //THIS IS THE DELIVERY PART
 	  reverse(1100);
 	  turn_around();
 	  sensor_value = line_following();
@@ -288,7 +294,7 @@ void D2orD5_path(string InitialPoint){
 	  stop();
 	  delivery_mechanism(); // **YET TO BE DONE**
 
-	  /*RETURN HOME*/
+	  //RETURN HOME
 	  reverse(1100);
 	  turn_around();
 	  sensor_value = line_following();
@@ -336,7 +342,7 @@ void D2orD5_path(string InitialPoint){
 	  stop();
 	}
 	else{
-	  /*THIS IS THE DELIVERY PART*/
+	  //THIS IS THE DELIVERY PART
 	  reverse(1100);
 	  turn_around();
 	  sensor_value = line_following();
@@ -374,7 +380,7 @@ void D2orD5_path(string InitialPoint){
 	  stop;
 	  delivery_mechanism(); // **YET TO BE DONE**
 
-	  /*RETURN HOME*/
+	  //RETURN HOME
 	  reverse(1100);
 	  turn_around();
 	  sensor_value = line_following();
@@ -426,7 +432,7 @@ void D3orD6_path(string InitialPoint){
 	int speed_motor1, speed_motor2;
 	bool turned_left = false, turned_right = false;
 	if (InitialPoint == "P1"){ //choose detination depending on orientation of turn table
-	  /*THIS IS THE DELIVERY PART*/
+	  //THIS IS THE DELIVERY PART
 	  reverse(1100);
 	  turn_around();
 	  sensor_value = line_following();
@@ -474,7 +480,7 @@ void D3orD6_path(string InitialPoint){
 	  stop();
 	  delivery_mechanism(); // **YET TO BE DONE**
 
-	  /*RETURN HOME*/
+	  //RETURN HOME
 	  reverse(1100);
 	  if (turned_right == true){
 		  turn_left();
@@ -527,7 +533,7 @@ void D3orD6_path(string InitialPoint){
 	  stop();
 	}
 	else{
-	  /*THIS IS THE DELIVERY PART*/
+	  //THIS IS THE DELIVERY PART
 	  reverse(1100);
 	  turn_around();
 	  sensor_value = line_following();
@@ -575,7 +581,7 @@ void D3orD6_path(string InitialPoint){
 	  stop();
 	  delivery_mechanism(); // **YET TO BE DONE**
 
-	  /*RETURN HOME*/
+	  //RETURN HOME
 	  reverse(1100);
 	  if (turned_right == true){
 		  turn_left();
@@ -627,4 +633,4 @@ void D3orD6_path(string InitialPoint){
 	  }
 	  stop();
 	}
-}
+}*/
