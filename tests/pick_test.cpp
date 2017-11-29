@@ -7,7 +7,7 @@ using namespace std;
 #define ROBOT_NUM 14
 robot_link rlink;
 #include "movement.h"
-#include "decision.h"
+//#include "decision.h"
 int val; 
 
 int main(){
@@ -34,7 +34,9 @@ stopwatch watch;
     cout << "Test failed (bad value returned)" << endl;
 
 }
-/*watch.start();
+
+/*
+watch.start();
 while (watch.read() <500000){object_ahead();}
 
 
@@ -43,8 +45,19 @@ watch.start();
 while (watch.read()<3000)
 {sensors = sensors_read();
 line_following(sensors);}
-stop();*/
+stop()*/
+int sensors;
+sensors = sensors_read();
+while (sensors != 15){
+	line_following(sensors);
+	sensors= sensors_read();}
+turn_around();
 
-alignment_pickup();
+sensors = sensors_read();
+while (sensors != 15){
+	line_following(sensors);
+	sensors= sensors_read();}
 
 return 0;}
+
+
