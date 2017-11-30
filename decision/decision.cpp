@@ -391,8 +391,12 @@ void D2orD5_path(string InitialPoint){
 	else{*/
 	  
 	  int turn = 0;
-	  
+	  stopwatch watch2;
 	  //THIS IS THE DELIVERY PART
+	  watch2.start();
+	  while (watch2.read() < 2000){
+		rlink.command(MOTOR_4_GO,127);
+	  }
 	  reverse_robot(1100);
 	  turn_around();
 	  int sensor_value = sensors_read();
