@@ -7,7 +7,7 @@ using namespace std;
 #define ROBOT_NUM 14
 robot_link rlink;
 #include "movement.h"
-//#include "decision.h"
+#include "decision.h"
 int val; 
 
 int main(){
@@ -34,30 +34,24 @@ stopwatch watch;
     cout << "Test failed (bad value returned)" << endl;
 
 }
-
+//turn_left();
+D4_path("P2");
+/*int sensors = sensors_read();
+bool box = object_ahead();
+while (box != true)
+{	line_following(sensors);
+	sensors = sensors_read();
+	box = object_ahead();
+	}
+alignment_pickup();
+pick_up(0);
+reverse_robot(2000);
+turn_around();*/
 /*
 watch.start();
-while (watch.read() <500000){object_ahead();}
-
-
-int sensors;
+while (watch.read() <5000){rlink.command(MOTOR_4_GO,127);} // goes up 5500
 watch.start();
-while (watch.read()<3000)
-{sensors = sensors_read();
-line_following(sensors);}
-stop()*/
-int sensors;
-sensors = sensors_read();
-while (sensors != 15){
-	line_following(sensors);
-	sensors= sensors_read();}
-turn_around();
-
-sensors = sensors_read();
-while (sensors != 15){
-	line_following(sensors);
-	sensors= sensors_read();}
-
+while (watch.read() <4500){rlink.command(MOTOR_4_GO,255);} //goes down - 3700*/
 return 0;}
 
 
