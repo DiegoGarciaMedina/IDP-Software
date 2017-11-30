@@ -231,19 +231,21 @@ return (box_type);
 }
 
 void pick_up(int height){
-	int time,speedUP,speedDOWN;
+	int timeUP, timeDOWN,speedUP,speedDOWN;
 	stopwatch watch_pickup;
-	if (height == 0){time = 4500;speedDOWN=255;speedUP=speedDOWN-127;}
-	else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
+	if (height == 0){timeUP= 5500;timeDOWN = 4500; speedDOWN=255;speedUP=127;}
+	//else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
 	watch_pickup.start();
 	rlink.command(WRITE_PORT_2,2); // OPENS
-	while (watch_pickup.read()<time){
+	while (watch_pickup.read()<timeDOWN){
 		rlink.command(MOTOR_4_GO,speedDOWN);//downwards
 	}
 	rlink.command(MOTOR_4_GO,0); //stop motor
 	rlink.command(WRITE_PORT_2,253); // CLOSES
 	watch_pickup.start();
-	while (watch_pickup.read()<time){
+	while(watch_pickup.read()<1000){}
+	watch_pickup.start();
+	while (watch_pickup.read()<timeUP){
 		rlink.command(MOTOR_4_GO,speedUP);//upwards
 	}
 	rlink.command(MOTOR_4_GO,0); //stop motor
@@ -336,12 +338,13 @@ reverse_robot(700);
 stopwatch watch_alignment_pickup;
 watch_alignment_pickup.start();
 int sensors = sensors_read();
-  while (watch_alignment_pickup.read() < 998
+  while (watch_alignment_pickup.read() < 2000
   ){
 	sensors = sensors_read();
 	line_following(sensors);
   }
-  //reverse_robot(10);
+  reverse_robot(150);
+  
   stop();
 }
 
