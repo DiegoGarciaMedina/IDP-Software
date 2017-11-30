@@ -7,6 +7,6 @@ using namespace std;
 
 void path_choice(string BoxType, string InitialPoint); //InitialPoint will always be P2 as we are not choosing to pick up stacked boxes
 void D1_path(string InitialPoint);
-/*void D4_path(string InitialPoint);
-void D2orD5_path(string InitialPoint);
+void D4_path(string InitialPoint);
+/*void D2orD5_path(string InitialPoint);
 void D3orD6_path(string InitialPoint);*/

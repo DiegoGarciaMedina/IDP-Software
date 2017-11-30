@@ -11,9 +11,9 @@ extern robot_link rlink;
 
 
 void D1_path(string);
-/*void D4_path(string);
-void D2orD5_path(string);
-void D3orD6_path(string);
+void D4_path(string);
+//void D2orD5_path(string);
+/*void D3orD6_path(string);
 
 void path_choice(int BoxType, string InitialPoint){
   switch (BoxType){
@@ -151,9 +151,56 @@ void D1_path(string InitialPoint){
 	  alignment_pickup();
   }
 }}
-/*
 
 void D4_path(string InitialPoint){
+ if (InitialPoint == "P2"){
+      //THIS IS THE DELIVERY PART
+      reverse_robot(500);
+      turn_left();
+      int sensor_value = sensors_read();
+      while (sensor_value != 15){
+          line_following(sensor_value);
+          sensor_value = sensors_read();
+      }
+      straight_junction();
+      bool wall = object_ahead();
+      while (wall != true){
+          line_following(sensor_value);
+          sensor_value = sensors_read();
+          wall = object_ahead();
+          cout<< wall << endl;
+      }
+      stop();
+      //high_dropbox(); // **YET TO BE DONE**
+
+      //RETURN HOME
+      reverse_robot(1100);
+      turn_around();
+      sensor_value = sensors_read();
+      cout << sensors_value<< endl;
+      while (sensor_value != 15){
+		  line_following(sensor_value);
+          sensor_value = line_following(sensor_value);
+      }
+      straight_junction();
+      sensor_value = sensors_read();
+      while (sensor_value != 15){
+          sensor_value = line_following(sensor_value);
+      }
+      turn_left();
+      reverse_robot(1000);
+      bool block = object_ahead();
+      while (block != true){
+          sensor_value = line_following(sensor_value);
+          block = object_ahead();
+      alignment_pickup();
+      }
+      stop();
+      
+  }
+ }
+
+/*void D4_path(string InitialPoint){
 	if (InitialPoint == "P2"){
 	  //THIS IS THE DELIVERY PART
 	  reverse_robot(1100);
@@ -250,12 +297,12 @@ void D4_path(string InitialPoint){
 	  stop();
   }
 
-}
-
+}*/
+/*
 void D2orD5_path(string InitialPoint){
 	int speed_motor1, speed_motor2;
 	bool turned_left = false, turned_right = false;
-	if (InitialPoint == "P1"){ //choose detination depending on orientation of turn table
+	/*if (InitialPoint == "P1"){ //choose detination depending on orientation of turn table
 	  //THIS IS THE DELIVERY PART
 	  reverse(1100);
 	  turn_around();
@@ -342,6 +389,7 @@ void D2orD5_path(string InitialPoint){
 	  stop();
 	}
 	else{
+	  
 	  //THIS IS THE DELIVERY PART
 	  reverse(1100);
 	  turn_around();
@@ -362,7 +410,7 @@ void D2orD5_path(string InitialPoint){
 		  speed_motor1 = rlink.request(MOTOR_1); // Assumining motor 1 is on the left
 		  speed_motor2 = rlink.request(MOTOR_2) - 127; // This one is on the right
 		  if (speed_motor1 - speed_motor2 > 10 && turned_right == false
-			  && turned_left == false){ // ***VALUE TO BE CALIBRATED***
+			  && turned_left == false){ 
 			   turned_right = true;
 			   turned_left = false;
 		   }
@@ -426,8 +474,8 @@ void D2orD5_path(string InitialPoint){
 		  block = distance_sensor();
 	  }
 	  stop();
-	}
-
+	}*/
+/*
 void D3orD6_path(string InitialPoint){
 	int speed_motor1, speed_motor2;
 	bool turned_left = false, turned_right = false;
