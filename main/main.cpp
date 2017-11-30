@@ -8,7 +8,7 @@
 using namespace std;
 #define ROBOT_NUM 14
 robot_link rlink;
-stopwatch watch;
+stopwatch watch2;
 
 int main(){
 
@@ -21,7 +21,7 @@ int main(){
 #endif
 }
 
-  val = rlink.request (TEST_INSTRUCTION); // send test instruction
+  int val = rlink.request (TEST_INSTRUCTION); // send test instruction
   if (val == TEST_INSTRUCTION_RESULT) {   // check result
     cout << "Test passed" << endl;
   }
@@ -38,7 +38,34 @@ int main(){
   //pick up
   //id
   //path_choice(BoxType, starting point)
+  /*
+	watch2.start();
+	while (watch2.read() < 2000){
+		rlink.command(MOTOR_4_GO,255);
+	}
+	watch2.start();
+	while (watch2.read() < 2000){
+		rlink.command(WRITE_PORT_2,2); // 0=close
+	}
+	watch2.start();
+	while (watch2.read() < 2000){
+		rlink.command(WRITE_PORT_2,0); // 0=close
+	}
+	watch2.start();
+	while (watch2.read() < 800){
+		rlink.command(MOTOR_4_GO,127);
+	}
 	
+	watch2.start();
+	while (watch2.read() < 800){
+		rlink.command(MOTOR_4_GO,0);
+	}*/
+	
+		
+  //val = box_id();
+  
+  //cout << val << endl;
+  
   return 0;
 }
 
