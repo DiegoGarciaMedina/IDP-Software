@@ -12,29 +12,29 @@ extern robot_link rlink;
 
 void D1_path(string);
 void D4_path(string);
-//void D2orD5_path(string);
-/*void D3orD6_path(string);
+void D2orD5_path(string);
+void D3orD6_path(string);
 
 void path_choice(int BoxType, string InitialPoint){
   switch (BoxType){
-  case 0:
+  case 4:
     cout << "O/C detected, heading to D1." << endl;
     D1_path(InitialPoint);
-  case 1: 
+  case 0: 
     cout << "Short circuit detected, heading to D1." << endl;
     D1_path(InitialPoint);
-  case 2:
+  case 1:
     cout << "Box type 1 detected, heading to D2." << endl;
     D2orD5_path(InitialPoint);
-  case 3: 
+  case 2: 
     cout << "Box type 2 detected, heading to D4." << endl;
     D4_path(InitialPoint);
-  case 4: 
+  case 3: 
     cout << "Box type 3 detected, heading to D3." << endl;
     D3orD6_path(InitialPoint);
   default : cout << "The box has not been properly classified!" << endl;
   }
-}*/
+}
 
 void D1_path(string InitialPoint){
   int i;
@@ -57,8 +57,8 @@ void D1_path(string InitialPoint){
 		  cout<< wall << endl;
 	  }
 	  stop();
-	  //alignment_drop();
-	  //drop_box(1);
+	  alignment_drop();
+	  drop_box();
 
 	  //RETURN HOME
 	  reverse_robot(1100); 
@@ -110,9 +110,8 @@ void D1_path(string InitialPoint){
 		  wall = object_ahead();
 		  sensor_value = sensors_read();
 	  }
-	  stop();
-	  //alignment_drop();
-	  //drop_box(1); // **YET TO BE DONE**
+	  alignment_pickup();
+	  high_dropbox(); 
 
 	  //RETURN HOME
 	  reverse_robot(1100);
@@ -147,15 +146,15 @@ void D1_path(string InitialPoint){
 		  sensor_value = line_following(sensor_value);
 		  sensor_value = sensors_read();
 	  }
-	  stop();
-	  alignment_pickup();
+	 
+	  
   }
 }}
 
 void D4_path(string InitialPoint){
  if (InitialPoint == "P2"){
       //THIS IS THE DELIVERY PART
-      reverse_robot(500);
+      reverse_robot(300);
       turn_left();
       int sensor_value = sensors_read();
       while (sensor_value != 15){
@@ -170,32 +169,36 @@ void D4_path(string InitialPoint){
           wall = object_ahead();
           cout<< wall << endl;
       }
+      alignment_pickup();
       stop();
-      //high_dropbox(); // **YET TO BE DONE**
+      high_dropbox(); 
 
       //RETURN HOME
       reverse_robot(1100);
       turn_around();
+      reverse_robot(500);
       sensor_value = sensors_read();
       cout << sensor_value << endl;
       while (sensor_value != 15){
 		  line_following(sensor_value);
-          sensor_value = line_following(sensor_value);
+          sensor_value = sensors_read();
       }
       straight_junction();
       sensor_value = sensors_read();
       while (sensor_value != 15){
-          sensor_value = line_following(sensor_value);
+          sensor_value = line_following(sensor_value); 
+          sensor_value = sensors_read();
       }
-      turn_left();
+		turn_left();
       reverse_robot(1000);
-      bool block = object_ahead();
+      /*bool block = object_ahead();
       while (block != true){
           sensor_value = line_following(sensor_value);
+          sensor_value = sensors_read();
           block = object_ahead();
       alignment_pickup();
       }
-      stop();
+      stop();*/
       
   }
  }
@@ -363,7 +366,10 @@ void D2orD5_path(string InitialPoint){
 	  }
 	  sensor_value = line_following();
 	  while (sensor_value != 7 && sensor_value != 15){
-		sensor_value = line_following();
+		sensor_value = line_followingwatch2.start();
+	while (watch2.read() < 2000){
+		rlink.command(WRITE_PORT_2,0); // 0=close
+	}();
 	  }
 	  straight_junction();
 	  sensor_value = line_following();
@@ -393,58 +399,76 @@ void D2orD5_path(string InitialPoint){
 	  int turn = 0;
 	  stopwatch watch2;
 	  //THIS IS THE DELIVERY PART
-	  watch2.start();
-	  while (watch2.read() < 2000){
-		rlink.command(MOTOR_4_GO,127);
-	  }
 	  reverse_robot(1100);
 	  turn_around();
 	  int sensor_value = sensors_read();
 	  while (sensor_value != 15){
 		  sensor_value = line_following(sensor_value);
+		  sensor_value = sensors_read();
 	  }
 	  straight_junction();
 	  sensor_value = sensors_read();
 	  while (sensor_value != 15){
 		  sensor_value = line_following(sensor_value);
+		  sensor_value = sensors_read();
 	  }
 	  turn_right();
 	  sensor_value = sensors_read();
 	  while (sensor_value != 15){
 		  sensor_value = line_following(sensor_value);
+		  sensor_value = sensors_read();
+	  }
+	  straight_junction();
+	  sensor_value = sensors_read();
+	  while (sensor_value != 15){
+		  sensor_value = line_following(sensor_value);
+		  sensor_value = sensors_read();
 		  turn = turn_detection(sensor_value,turn);
 	  }
-	  if (turn > 0){turned_right = true;}
-	  else {turned_left = true;} 
+	  if (turn > 0){turned_right = true;
+		  cout << "It has turned right" << endl;}
+	  else {turned_left = true;
+		  cout << "It has turned left" << endl;} 
 	  straight_junction();
-	  bool block = object_ahead();
 	  sensor_value = sensors_read();
-	  while (block != true){
+	  while (sensor_value != 15){
 		  sensor_value = line_following(sensor_value);
-		  block = object_ahead();
+		  sensor_value = sensors_read();
 	  }
 	  stop();
-	  //delivery_mechanism(); // **YET TO BE DONE**
-
+	  alignment_drop();
+	  drop_box(); 
+	  
 	  //RETURN HOME
 	  reverse_robot(1100);
 	  turn_around();
 	  sensor_value = sensors_read();
-	  while ((sensor_value != 15)||(sensor_value != 0)){
+	  while ((sensor_value != 15)&&(sensor_value != 0)){
 		  sensor_value = line_following(sensor_value);
 		  sensor_value = sensors_read();
 	  }
-	  stop();
-	  if (sensor_value == 15){} // turn table is the correct way round
+	  if (sensor_value == 15){cout << "The turn table was in the right direction" << endl;} // turn table is the correct way round
 	  else if (sensor_value == 0){
-		  blind_turn(turn);
+		  int numZeros = 0;
 		  sensor_value = sensors_read();
+		  while (sensor_value != 15){
+			sensor_value = line_following(sensor_value);
+			sensor_value = sensors_read();
+			if (sensor_value == 0){
+			numZeros += 1;
+		    }
+		    if (numZeros > 50){
+				blind_turn(turn);
+				sensor_value = sensors_read();
+				while (sensor_value != 15){
+			      sensor_value = line_following(sensor_value);
+				  sensor_value = sensors_read();
+				}
+				break;
+				}
 		  }
-	  sensor_value = sensors_read();
-	  while (sensor_value != 15){
-		sensor_value = line_following(sensor_value);
-		sensor_value = sensors_read();
 	  }
+      
 	  straight_junction();
 	  sensor_value = sensors_read();
 	  while (sensor_value != 15){
@@ -464,13 +488,14 @@ void D2orD5_path(string InitialPoint){
 		sensor_value = sensors_read();
 	  }
 	  straight_junction();
-	  block = object_ahead();
-	  sensor_value = sensors_read();
+	  /*sensor_value = sensors_read();
+	  bool block = object_ahead();
 	  while (block != true){
 		  sensor_value = line_following(sensor_value);
 		  block = object_ahead();
 	  }
 	  stop();
+	  alignment_pickup();*/
 }
 	
 void D3orD6_path(string InitialPoint){
@@ -490,6 +515,13 @@ void D3orD6_path(string InitialPoint){
           sensor_value = sensors_read();
       }
       turn_right();
+      
+      while (sensor_value != 15){
+          line_following(sensor_value);
+          sensor_value = sensors_read();
+      }
+      straight_junction();
+      
       sensor_value = sensors_read();
       int turn;
       turn=0;
@@ -497,7 +529,7 @@ void D3orD6_path(string InitialPoint){
           line_following(sensor_value);
           sensor_value = sensors_read();
           turn = turn_detection(sensor_value,turn);}
-      if (turn < 0){
+      if (turn > 0){
         turn_left();}
       else{
         turn_right();}
@@ -507,12 +539,12 @@ void D3orD6_path(string InitialPoint){
           sensor_value = sensors_read();
       }
       stop();
-      //alignment_drop();
-      // DROP BOX AT THAT POINT
+      alignment_drop();
+      drop_box();
 
 //RETURN HOME
       reverse_robot(1100);
-      if (turn > 0){
+      if (turn>0){
         turn_left();}
       else{
         turn_right();}

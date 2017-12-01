@@ -48,11 +48,11 @@ int line_following(int sensors) {
 		break;
 		case 3:
 		ms_l = speed +127;
-		ms_r = 0; // (ms_l)/2 if we want the right wheel to reverse
+		ms_r = (ms_l)/2; // if we want the right wheel to reverse
 		break;
 		case 7:
 		ms_l = speed +127;
-		ms_r = 0; // (ms_l)/2 if we want the right wheel to reverse
+		ms_r = (ms_l)/2; //if we want the right wheel to reverse
 		break;
 		case 4:
 		ms_r = speed;
@@ -131,7 +131,7 @@ rlink.command(MOTOR_3_GO,ms_l); //update the left motor speed
 
 stopwatch watch;
 watch.start();
-while (watch.read()<900){ //1200
+while (watch.read()<1200){ //1200
 }
 }
 
@@ -179,7 +179,7 @@ void stop(void){
 int box_id(void){
   stopwatch watch;
   stopwatch watch2;
-  rlink.command(WRITE_PORT_2,255); //turning all LEDs off
+  //rlink.command(WRITE_PORT_2,255); //turning all LEDs off
 
   int v;
   int box_type;
@@ -209,32 +209,31 @@ int box_id(void){
 
   if (time_taken > 1500){
 	  box_type = 0 ;
-	  rlink.command(WRITE_PORT_2,251); //short circuit
+	  rlink.command(WRITE_PORT_2,251-2); //short circuit
   }
   else if (time_taken > 800){
 	  box_type = 1;
-	  rlink.command(WRITE_PORT_2,191);//type 1
+	  rlink.command(WRITE_PORT_2,191-2);//type 1
   }
   else if (time_taken > 70){
 	  box_type = 2;
-	  rlink.command(WRITE_PORT_2,223);// type 2
+	  rlink.command(WRITE_PORT_2,223-2);// type 2
   }
   else if (time_taken > 20){
 	  box_type = 3;
-	  rlink.command(WRITE_PORT_2,239);//type 3
+	  rlink.command(WRITE_PORT_2,239-2);//type 3
   }
   else {
 	  box_type = 4;
-	  rlink.command(WRITE_PORT_2,247); //open circuit
+	  rlink.command(WRITE_PORT_2,247-2); //open circuit
   }
 return (box_type);
 }
 
-void pick_up(int height){
+void pick_up(){
 	int timeUP, timeDOWN,speedUP,speedDOWN;
 	stopwatch watch_pickup;
-	if (height == 0){timeUP= 5500;timeDOWN = 4500; speedDOWN=255;speedUP=127;}
-	//else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
+	timeUP= 5900;timeDOWN = 4800; speedDOWN=255;speedUP=127;
 	watch_pickup.start();
 	rlink.command(WRITE_PORT_2,2); // OPENS
 	while (watch_pickup.read()<timeDOWN){
@@ -251,25 +250,30 @@ void pick_up(int height){
 	rlink.command(MOTOR_4_GO,0); //stop motor
 }
 
-void drop_box(int height){
-	int time,speedUP,speedDOWN;
-	if (height == 0){time = 1500;speedDOWN=255;speedUP=speedDOWN-127;}
-	else {time = 2500;speedUP=127;speedDOWN=speedUP+127;}
-	watch.start();
-	while (watch.read()<time){
+void high_dropbox(){
+	rlink.command(WRITE_PORT_2,2);
+	reverse_robot(500);
+	rlink.command(WRITE_PORT_2,253);}
+	
+	
+void drop_box(){
+	int timeUP, timeDOWN ,speedUP,speedDOWN;
+	stopwatch watch_drop;
+	timeUP = 5500; timeDOWN =4500;speedDOWN=255;speedUP=127;
+	watch_drop.start();
+	while (watch_drop.read()<timeDOWN){
 		rlink.command(MOTOR_4_GO,speedDOWN);//downwards
 	}
 	rlink.command(MOTOR_4_GO,0); //stop motor
 	rlink.command(WRITE_PORT_2,2); // OPENS
-	watch.start();
-	while (watch.read()<1000){
+	watch_drop.start();
+	while (watch_drop.read()<1000){
 		// wait for bax to fall
 	}
+	watch_drop.start();
+	while (watch_drop.read()<timeUP){
+		rlink.command(MOTOR_4_GO,speedUP);}//upwards
 	rlink.command(WRITE_PORT_2,253); // CLOSES
-	watch.start();
-	while (watch.read()<1200){
-		rlink.command(MOTOR_4_GO,speedUP);//upwards
-	}
 	rlink.command(MOTOR_4_GO,0); //stop motor
 }
 
@@ -355,6 +359,7 @@ void blind_turn(int turn){ //this will be a positive if it has turned right at t
 int speed = 100;
 stopwatch watch;
 watch.start();
+cout <<"were going blind" << endl;
 while (watch.read()<2000)
 {
     rlink.command(MOTOR_3_GO,speed); //update the right motor speed

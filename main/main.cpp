@@ -35,36 +35,36 @@ int main(){
   }
   
   //go get the box
-  //pick up
-  //id
-  //path_choice(BoxType, starting point)
-  /*
-	watch2.start();
-	while (watch2.read() < 2000){
-		rlink.command(MOTOR_4_GO,255);
-	}
-	watch2.start();
-	while (watch2.read() < 2000){
-		rlink.command(WRITE_PORT_2,2); // 0=close
-	}
-	watch2.start();
-	while (watch2.read() < 2000){
-		rlink.command(WRITE_PORT_2,0); // 0=close
-	}
-	watch2.start();
-	while (watch2.read() < 800){
-		rlink.command(MOTOR_4_GO,127);
-	}
+  int sensor_value = sensors_read();
+	  while (sensor_value != 15){
+		sensor_value = line_following(sensor_value);
+		sensor_value = sensors_read();
+	  }
+	straight_junction();
 	
-	watch2.start();
-	while (watch2.read() < 800){
-		rlink.command(MOTOR_4_GO,0);
-	}*/
+	sensor_value = sensors_read();
+	  while (sensor_value != 15){
+		sensor_value = line_following(sensor_value);
+		sensor_value = sensors_read();
+	  }
+	straight_junction();
 	
-		
-  //val = box_id();
-  
-  //cout << val << endl;
+
+stopwatch watch_main;
+watch_main.start();
+
+while (watch_main.read() < 30000000)
+{bool block = object_ahead();
+	  while (block != true){
+		  sensor_value = line_following(sensor_value);
+		  block = object_ahead();
+		  sensor_value = sensors_read();
+	  }
+	alignment_pickup();
+	pick_up();
+	int val = box_id();
+	path_choice(val, "P2");}
+
   
   return 0;
 }
